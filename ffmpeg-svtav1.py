@@ -5,6 +5,7 @@ import re
 import subprocess
 
 video_ext = [".mp4", ".mkv"]
+output_file_prefix = "(SVT-AV1)"
 output_dir_basename = "svtav1"
 logger = getLogger("logger")
 
@@ -34,7 +35,7 @@ def compress(fdpath, file, modified_files):
         os.mkdir(output_dir)
 
     input_path = f"{fdpath}{os.sep}{file_name}"
-    output_path = f"{output_dir}{os.sep}{splitted_file_name[0]}_svtav1.mkv"
+    output_path = f"{output_dir}{os.sep}{output_file_prefix}{splitted_file_name[0]}.mkv"
 
     ffmpeg_svtav1_command = [
         "ffmpeg",
@@ -44,15 +45,9 @@ def compress(fdpath, file, modified_files):
         "-c:v",
         "libsvtav1",
         "-preset",
-        "5",
+        "10",
         "-crf",
-        "32",
-        "-g",
-        "240",
-        "-pix_fmt",
-        "yuv420p10le",
-        "-svtav1-params",
-        "tune=0:film-grain=8",
+        "35",
         "-c:a",
         "copy",
         output_path,
@@ -63,7 +58,7 @@ def compress(fdpath, file, modified_files):
     modified_files.append(
         f"{fdpath}{os.sep}\n"
         f"\t{file_name}\n"
-        f"\t-> {output_dir_basename}{os.sep}{splitted_file_name[0]}_svtav1.mkv\n"
+        f"\t-> {output_dir_basename}{os.sep}{output_file_prefix}{splitted_file_name[0]}.mkv\n"
     )
 
 
